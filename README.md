@@ -255,6 +255,12 @@ kubectl -n poc-oke rollout status deployment/testoke
 
 ---
 
+## IAM Policies Baseline
+
+📋 [policies-baseline.md](iam-policies/policies-baseline.md)
+
+---
+
 ## References
 
 - [OKE Virtual Nodes — Required IAM Policies](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengvirtualnodes-Required_IAM_Policies.htm)
