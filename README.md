@@ -207,6 +207,7 @@ kubectl -n poc-oke rollout status deployment/testoke
 ## Full Technical Whitepaper
 
  [OKE_VirtualNodePool_ACE_TechnicalDeepDive.docx](docs/OKE_VirtualNodePool_ACE_TechnicalDeepDive.docx)
+ 📄 [OKE_VirtualNodePool_ACE_TechnicalDeepDive.pdf](docs/OKE_VirtualNodePool_ACE_TechnicalDeepDive.pdf)
 
 ---
 
