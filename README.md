@@ -113,7 +113,7 @@ oke-virtual-nodepool-deep-dive/
 ├── screenshots/
 │   ├── 01-kubectl-nodes-pods-lb.png       ← kubectl: nodes, pods, LB from Git Bash
 │   ├── 02-console-virtual-nodepool.png    ← OCI Console: Virtual Node Pool ACTIVE
-│   └── 03-console-container-instances.png ← OCI Console: Container Instances per Pod
+│   └── 03-03-console-subnet-vnic-cidr.png ← OCI Console: Container Instances per Pod
 │
 └── README.md
 ```
@@ -129,7 +129,7 @@ oke-virtual-nodepool-deep-dive/
 ![virtual nodepool console](screenshots/02-console-virtual-nodepool.png)
 
 ### OCI Console — Container Instances (one per Pod)
-![container instances console](screenshots/03-console-container-instances.png)
+![container instances console](screenshots/03-console-subnet-vnic-cidr.png)
 
 ---
 
