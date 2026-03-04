@@ -133,6 +133,16 @@ oke-virtual-nodepool-deep-dive/
 
 ---
 
+## Manifests
+
+| File | Description |
+|------|-------------|
+| [00-serviceaccount.yaml](manifests/00-serviceaccount.yaml) | Dedicated ServiceAccount with OCIR pull secret |
+| [10-deployment.yaml](manifests/10-deployment.yaml) | Production deployment — Guaranteed QoS, readiness, liveness, preStop |
+| [20-service-lb.yaml](manifests/20-service-lb.yaml) | Internal OCI Load Balancer — externalTrafficPolicy: Local |
+
+---
+
 ## IAM Baseline (Cross-Compartment)
 
 ```
