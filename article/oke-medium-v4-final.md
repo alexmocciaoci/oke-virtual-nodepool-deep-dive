@@ -758,6 +758,6 @@ The complete reference implementation is at:
 
 ---
 
-*Alessandro Moccia — Oracle Solution Architect, OCI Specialist at Accenture/Noovle. Oracle ACE Program candidate.*
+*Alessandro Moccia — Oracle Solution Architect, OCI Specialist at Accenture. Oracle ACE Program candidate.*
 
 *Tags: Oracle Cloud, Kubernetes, OKE, Cloud Architecture, IAM, Cloud Native, DevOps*
