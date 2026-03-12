@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>OKE Virtual Node Pool: What the Docs Don't Tell You</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">OKE Virtual Node Pool: What the Docs Don't Tell
+You</h1>
+</header>
+<h1 id="oke-virtual-node-pool-what-the-docs-dont-tell-you">OKE Virtual
+Node Pool: What the Docs Don’t Tell You</h1>
+<h2
+id="a-production-deep-dive-into-cross-compartment-iam-guaranteed-qos-pod-pending-root-causes-zero-downtime-subnet-migration-and-application-logging.">A
+production deep dive into cross-compartment IAM, Guaranteed QoS, Pod
+Pending root causes, zero-downtime subnet migration, and application
+logging.</h2>
+<p><em>By Alessandro Moccia — Oracle Solution Architect | Oracle ACE
+Program</em></p>
+<hr />
+<p>There is a specific kind of frustration that only cloud engineers
+know: you follow the official documentation to the letter, you configure
+everything exactly as described, and the platform returns a cryptic
+authorization error with no Work Request, no trace, and no
+explanation.</p>
+<p>That is how this story begins.</p>
+<p>This article covers OKE Virtual Node Pool in a fully private,
+cross-compartment enterprise architecture — no Internet Gateway, no NAT
+Gateway, Service Gateway only. The findings are organized into two
+types: empirically validated behaviors discovered during hands-on
+deployment and supported in several cases by Oracle Support Service
+Request evidence, and documented behaviors from Oracle official sources
+cited inline where referenced.</p>
+<p>The full reference implementation — IAM policies, manifests,
+architecture diagrams, screenshots, and the complete technical
+whitepaper — is at: <strong><a
+href="https://github.com/alexmocciaoci/oke-virtual-nodepool-deep-dive">github.com/alexmocciaoci/oke-virtual-nodepool-deep-dive</a></strong></p>
+<hr />
+<h2
+id="before-we-start-virtual-nodes-are-fundamentally-different">Before We
+Start: Virtual Nodes Are Fundamentally Different</h2>
+<p>Most engineers approach OKE Virtual Nodes as “managed nodes but
+lighter.” That mental model will cause problems in production.</p>
+<p>Virtual Nodes are architecturally closer to a serverless compute
+abstraction than to Kubernetes worker nodes. According to <a
+href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcomparingvirtualwithmanagednodes_topic.htm">Oracle’s
+comparison documentation</a>, virtual nodes run in the Kubernetes Engine
+tenancy — not in the customer tenancy. This single fact drives every
+IAM, networking, and operational decision that follows.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Managed Nodes</th>
+<th>Virtual Nodes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Worker VM in your tenancy</td>
+<td>✅ Yes</td>
+<td>❌ No — runs in Oracle OKE service tenancy</td>
+</tr>
+<tr class="even">
+<td>DaemonSet support</td>
+<td>✅ Yes</td>
+<td>❌ No</td>
+</tr>
+<tr class="odd">
+<td>Instance Principal</td>
+<td>✅ Works</td>
+<td>❌ Not applicable</td>
+</tr>
+<tr class="even">
+<td>Pod networking</td>
+<td>VCN-Native or Flannel</td>
+<td>VCN-Native only</td>
+</tr>
+<tr class="odd">
+<td>Resource model</td>
+<td>Node-level</td>
+<td>Pod-level — each Pod = 1 VNIC + 1 real IP</td>
+</tr>
+<tr class="even">
+<td>Pod-to-OCI auth</td>
+<td>Instance Principal or Dynamic Group</td>
+<td>Workload Identity only</td>
+</tr>
+<tr class="odd">
+<td>IAM model</td>
+<td>Standard</td>
+<td>Cross-tenancy endorse required</td>
+</tr>
+</tbody>
+</table>
+<p>One hard prerequisite: Virtual Nodes are only supported on Enhanced
+Clusters, as documented in <a
+href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcomparingenhancedwithbasicclusters_topic.htm">Comparing
+Enhanced Clusters with Basic Clusters</a>.</p>
+<hr />
+<h2 id="the-architecture-private-only-cross-compartment">The
+Architecture: Private-Only, Cross-Compartment</h2>
+<p>The deployment was designed under enterprise constraints that reflect
+a common pattern in large OCI tenancies: strict compartmental separation
+between application and network resources.</p>
+<pre><code>OCI Tenancy
+│
+├── Cluster Compartment     ← OKE Enhanced Cluster
+│
+└── Network Compartment     ← VCN, subnets, NSGs
+         ↑
+         Sibling compartments — no shared parent below root</code></pre>
+<p>Three private regional subnets, no public egress:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 37%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Subnet</th>
+<th>Purpose</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>/29</td>
+<td>K8s API Endpoint</td>
+<td>Oracle-controlled sizing</td>
+</tr>
+<tr class="even">
+<td>/27</td>
+<td>Internal Load Balancer</td>
+<td>Minimum recommended</td>
+</tr>
+<tr class="odd">
+<td>/28 → /27</td>
+<td>Pod / Virtual Node IPs</td>
+<td>Each Pod = 1 real IP — see Finding 4</td>
+</tr>
+</tbody>
+</table>
+<p>In VCN-Native Pod Networking, every Pod consumes one real VCN IP
+address via a dedicated VNIC. As noted in the <a
+href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengnetworkconfig-virtualnodes.htm">Virtual
+Nodes networking documentation</a>, the number of pods available in the
+cluster is limited by the number of IP addresses available in the
+subnet. A /28 provides ~11 usable IPs — adequate for limited testing,
+insufficient for production. Use at minimum /26 for real workloads, /24
+for enterprise scale.</p>
+<p>All outbound traffic — OCIR image pulls, OCI API calls — routes
+exclusively via Service Gateway.</p>
+<hr />
+<h2 id="finding-1-the-iam-behavior-nobody-documents">Finding 1: The IAM
+Behavior Nobody Documents</h2>
+<p><strong>This is the most important section. Bookmark it.</strong></p>
+<h3 id="what-happened">What happened</h3>
+<p>During Virtual Node Pool creation, the OCI Console returned an
+immediate synchronous failure:</p>
+<pre><code>Authorization failed or requested resource not found</code></pre>
+<p>No Work Request was generated. No retryable error. Silent, immediate
+failure.</p>
+<p>The group had all policies from the <a
+href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengvirtualnodes-Required_IAM_Policies.htm">official
+Oracle IAM policy page for Virtual Nodes</a> applied correctly to the
+cluster compartment. Everything appeared correct.</p>
+<h3 id="what-oracle-support-found">What Oracle Support found</h3>
+<p>After opening a formal Service Request, Oracle Support retrieved the
+following from backend IAM evaluation logs:</p>
+<pre><code>requestedPermissions: [CLUSTER_VIRTUAL_NODE_POOL_CREATE]
+authorizedPermissions: []</code></pre>
+<p>Zero permissions authorized. Despite the policy being in place.</p>
+<h3
+id="root-cause-multi-scope-iam-evaluation-across-disjoint-compartments">Root
+cause: multi-scope IAM evaluation across disjoint compartments</h3>
+<p><code>CLUSTER_VIRTUAL_NODE_POOL_CREATE</code> is not a
+single-resource operation. When a Virtual Node Pool references subnets
+in a different compartment, the OCI IAM engine evaluates authorization
+across every compartment that contains resources referenced by the
+operation.</p>
+<p>The Cluster Compartment and the Network Compartment are siblings —
+their only common ancestor is the tenancy root. A policy in the Cluster
+Compartment has zero effect in the Network Compartment. The IAM engine
+evaluated the operation in the Network Compartment context, found no
+matching policy, and failed the entire operation.</p>
+<p>Oracle Support’s formal confirmation from the SR:</p>
+<blockquote>
+<p><em>“Based on what we saw, yes, we do think they need this permission
+in all compartments that are involved with creating the Cluster/VNP,
+that is indeed the reason why it was failing, as we can see in the
+logs.”</em></p>
+</blockquote>
+<p>This is by design, not a bug. And it is not documented in Oracle’s
+official IAM policy page for Virtual Nodes.</p>
+<h3 id="the-fix">The fix</h3>
+<p>The SR log identifies exactly which permission was missing:
+<code>CLUSTER_VIRTUAL_NODE_POOL_CREATE</code>, which maps to the
+resource type <code>cluster-virtualnode-pools</code>. The fix is one
+statement in the Network Compartment:</p>
+<pre class="hcl"><code># Network Compartment — SR-confirmed, not in Oracle docs
+allow group &lt;domain&gt;/&lt;group&gt; to manage cluster-virtualnode-pools
+  in compartment &lt;network-compartment&gt;</code></pre>
+<p>Oracle Support suggested <code>manage cluster-family</code> during
+the SR — which works but is over-permissioned. The log identifies only
+<code>CLUSTER_VIRTUAL_NODE_POOL_CREATE</code> as missing.
+<code>cluster-virtualnode-pools</code> is the least-privilege fix
+consistent with the evidence.</p>
+<hr />
+<h2 id="the-complete-iam-baseline-four-layers">The Complete IAM
+Baseline: Four Layers</h2>
+<p>Each layer serves a distinct purpose and cannot substitute for
+another. Missing any one produces a different, equally opaque
+failure.</p>
+<h3 id="layer-1-endorse-cross-tenancy-the-structural-foundation">Layer 1
+— Endorse (Cross-Tenancy): the structural foundation</h3>
+<p>Container Instances backing your Pods do not run in your tenancy.
+They run in the Oracle OKE service tenancy (<code>ske</code>). When a
+Virtual Node schedules a Pod, OKE needs to attach a VNIC to your subnet
+and associate your NSG rules — a cross-tenancy operation that requires
+an explicit <code>endorse</code> policy in your tenancy’s root
+compartment.</p>
+<p>The following statements must be created exactly as shown. The OCIDs
+are Oracle-managed constants — identical for every OCI customer, must
+not be changed. Source: <a
+href="https://blogs.oracle.com/cloud-infrastructure/getting-started-best-practices-oke-virtual-nodes">Oracle
+Blog — Getting started and best practices with OKE virtual
+nodes</a>.</p>
+<pre class="hcl"><code>define tenancy ske as ocid1.tenancy.oc1..aaaaaaaacrvwsphodcje6wfbc3xsixhzcan5zihki6bvc7xkwqds4tqhzbaq
+define compartment ske_compartment as ocid1.compartment.oc1..aaaaaaaa2bou6r766wmrh5zt3vhu2rwdya7ahn4dfdtwzowb662cmtdc5fea
+
+endorse any-user to associate compute-container-instances
+  in compartment ske_compartment of tenancy ske
+  with subnets in tenancy
+  where ALL { request.principal.type=&#39;virtualnode&#39;,
+              request.operation=&#39;CreateContainerInstance&#39;,
+              request.principal.subnet=request.subnet.id }
+
+endorse any-user to associate compute-container-instances
+  in compartment ske_compartment of tenancy ske
+  with vnics in tenancy
+  where ALL { request.principal.type=&#39;virtualnode&#39;,
+              request.operation=&#39;CreateContainerInstance&#39;,
+              request.principal.subnet=request.subnet.id }
+
+endorse any-user to associate compute-container-instances
+  in compartment ske_compartment of tenancy ske
+  with network-security-group in tenancy
+  where ALL { request.principal.type=&#39;virtualnode&#39;,
+              request.operation=&#39;CreateContainerInstance&#39; }</code></pre>
+<p><strong>Understanding
+<code>request.principal.type='virtualnode'</code></strong></p>
+<p>This condition identifies the OKE Virtual Node as the acting IAM
+principal — not the cluster, not a workload, not a user. Together, the
+three <code>where</code> conditions form a precise authorization scope:
+only a Virtual Node (<code>type='virtualnode'</code>), only during Pod
+scheduling (<code>operation='CreateContainerInstance'</code>), only on
+the subnet declared in its own configuration
+(<code>request.principal.subnet=request.subnet.id</code>).</p>
+<p><strong>Critical:</strong>
+<code>request.principal.type='virtualnode'</code> is an
+infrastructure-level principal. Its sole purpose is to authorize the
+cross-tenancy VNIC attachment during Pod creation. It cannot be used to
+grant Pods access to OCI services such as Object Storage, Functions, or
+Vault. For Pod-to-OCI-service authentication, the only supported
+mechanism on Virtual Nodes is Workload Identity — see Layer 4.</p>
+<p>Without these three endorse statements, no Pod can ever be scheduled.
+No workaround exists.</p>
+<h3 id="layer-2-user-group-policies-cluster-network-compartment">Layer 2
+— User Group Policies: cluster + network compartment</h3>
+<p><strong>Cluster Compartment</strong> — from <a
+href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengvirtualnodes-Required_IAM_Policies.htm">Oracle
+docs: Required IAM Policies for Using Virtual Nodes</a>:</p>
+<pre class="hcl"><code>allow group &lt;domain&gt;/&lt;group&gt; to manage cluster-virtualnode-pools
+  in compartment &lt;cluster-compartment&gt;
+
+allow group &lt;domain&gt;/&lt;group&gt; to read virtual-network-family
+  in compartment &lt;cluster-compartment&gt;
+
+allow group &lt;domain&gt;/&lt;group&gt; to manage vnics
+  in compartment &lt;cluster-compartment&gt;</code></pre>
+<p>If users also need to manage the OKE cluster itself, add:</p>
+<pre class="hcl"><code>allow group &lt;domain&gt;/&lt;group&gt; to manage cluster-family
+  in compartment &lt;cluster-compartment&gt;</code></pre>
+<p><strong>Network Compartment</strong> — not in Oracle docs, identified
+via SR backend log:</p>
+<pre class="hcl"><code>allow group &lt;domain&gt;/&lt;group&gt; to manage cluster-virtualnode-pools
+  in compartment &lt;network-compartment&gt;</code></pre>
+<p>OCI IAM policies are compartment-scoped. A policy in the Cluster
+Compartment has zero effect in the Network Compartment. When cluster and
+VCN live in sibling compartments disjoint to root, explicit policies are
+required in both. There is no inheritance, no shortcut.</p>
+<h3 id="layer-3-cluster-principal-oci-cni-runtime">Layer 3 — Cluster
+Principal (OCI CNI Runtime)</h3>
+<p>These statements allow the OKE cluster principal to manage VCN
+resources at Pod scheduling time. Required for VCN-Native Pod Networking
+in cross-compartment deployments — from <a
+href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengpodnetworking_topic-OCI_CNI_plugin.htm">Oracle
+docs: OCI VCN-Native Pod Networking CNI plugin</a>:</p>
+<pre class="hcl"><code>Allow any-user to manage instances in compartment &lt;cluster-compartment&gt;
+  where all { request.principal.type = &#39;cluster&#39;,
+               request.principal.id  = &#39;&lt;cluster-ocid&gt;&#39; }
+
+Allow any-user to use private-ips in compartment &lt;network-compartment&gt;
+  where all { request.principal.type = &#39;cluster&#39;,
+               request.principal.id  = &#39;&lt;cluster-ocid&gt;&#39; }
+
+Allow any-user to use network-security-groups in compartment &lt;network-compartment&gt;
+  where all { request.principal.type = &#39;cluster&#39;,
+               request.principal.id  = &#39;&lt;cluster-ocid&gt;&#39; }</code></pre>
+<h3 id="layer-4-workload-identity-pod-to-oci-authentication">Layer 4 —
+Workload Identity (Pod-to-OCI Authentication)</h3>
+<p>On Managed Nodes, a Dynamic Group matching
+<code>resource.type='computecontainerinstance'</code> grants Pods access
+to OCI services. On Virtual Nodes, this does not work. The Container
+Instances backing Pods run in the Oracle <code>ske</code> tenancy —
+invisible to customer IAM. Dynamic Groups cannot reference resources in
+a tenancy they cannot see.</p>
+<p>The only supported mechanism for Pod-to-OCI-service authentication on
+Virtual Nodes is Workload Identity — from <a
+href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contenggrantingworkloadaccesstoresources.htm">Oracle
+docs: Granting Workloads Access to OCI Resources</a>:</p>
+<pre class="hcl"><code>Allow any-user to &lt;verb&gt; &lt;resource&gt; in compartment &lt;target-compartment&gt;
+  where all {
+    request.principal.type            = &#39;workload&#39;,
+    request.principal.namespace       = &#39;&lt;k8s-namespace&gt;&#39;,
+    request.principal.service_account = &#39;&lt;serviceaccount-name&gt;&#39;,
+    request.principal.cluster_id      = &#39;&lt;cluster-ocid&gt;&#39;
+  }</code></pre>
+<p><code>request.principal.type='workload'</code> identifies the IAM
+principal as a Kubernetes workload — cluster + namespace +
+ServiceAccount. This identity is compute-independent: it does not depend
+on where the underlying Container Instance runs, which is precisely why
+it works on Virtual Nodes when Instance Principal does not.</p>
+<p>Oracle docs constraints: works only with OCI SDKs (Go ≥v65.32.0, Java
+≥v2.54.0, Python ≥v2.111.0, .NET ≥v87.3.0, Ruby ≥v2.19.0), cannot be
+combined with Dynamic Groups, create one provider instance per
+process.</p>
+<p>Workload Identity activates after the Pod is running — it plays no
+role in Pod creation or scheduling. The Pod spec must declare the
+ServiceAccount explicitly:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">serviceAccountName</span><span class="kw">:</span><span class="at"> &lt;serviceaccount-name&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">automountServiceAccountToken</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code></pre></div>
+<hr />
+<h2 id="finding-2-the-mandatory-bootstrap-sequence">Finding 2: The
+Mandatory Bootstrap Sequence</h2>
+<p>There is a chicken-and-egg problem at cluster initialization that
+surfaces only when you hit it.</p>
+<p>For a Pod to be scheduled, the cluster must be operational. For the
+cluster to be operational, at least one Pod must pull its image
+successfully. Image pull from OCIR requires authentication. On Virtual
+Nodes, neither the cluster principal nor the <code>virtualnode</code>
+principal can pull from OCIR — confirmed during deployment. The only
+supported mechanism for OCIR image pull on Virtual Nodes is a
+<code>docker-registry</code> Kubernetes Secret.</p>
+<p>This Secret must exist before any workload is deployed:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span> create secret docker-registry ocir-pullsecret <span class="dt">\</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--docker-server</span><span class="op">=&lt;</span>region<span class="op">&gt;</span>.ocir.io <span class="dt">\</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--docker-username</span><span class="op">=</span><span class="st">&#39;&lt;tenancy-namespace&gt;/&lt;identity-domain&gt;/&lt;username&gt;&#39;</span> <span class="dt">\</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--docker-password</span><span class="op">=</span><span class="st">&#39;&lt;auth-token&gt;&#39;</span></span></code></pre></div>
+<p>Create a dedicated ServiceAccount referencing it. Never patch the
+<code>default</code> ServiceAccount:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> ServiceAccount</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> sa-app</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> &lt;namespace&gt;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">imagePullSecrets</span><span class="kw">:</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ocir-pullsecret</span></span></code></pre></div>
+<p>Workload Identity can only be configured once the cluster is
+operational and Pods are running. The sequence is not negotiable:</p>
+<pre><code>Secret bootstrap → Cluster operational → Workload Identity configured</code></pre>
+<h3 id="cluster-access-identity-domains-and-kubeconfig">Cluster access:
+Identity Domains and kubeconfig</h3>
+<p>On Identity Domain tenancies, kubeconfig generation requires an
+additional flag:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">oci</span> ce cluster create-kubeconfig <span class="dt">\</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--cluster-id</span> <span class="op">&lt;</span>cluster-ocid<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--file</span> <span class="va">$HOME</span>/.kube/config <span class="dt">\</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--region</span> <span class="op">&lt;</span>region<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--token-version</span> 2.0.0</span></code></pre></div>
+<p>Without <code>--token-version 2.0.0</code>, authentication fails
+silently. Both Cloud Shell attached to a private subnet and Git Bash via
+corporate VPN were used successfully during the deployment.</p>
+<h3 id="build-vs-runtime-environments">Build vs runtime
+environments</h3>
+<p>Cloud Shell attached to a private VCN subnet cannot reach public
+image registries (docker.io, gcr.io) without a NAT Gateway or Internet
+Gateway. Use standard Cloud Shell with public egress for
+<code>podman build</code> and <code>podman push</code> to OCIR. The OKE
+cluster pulls from OCIR at runtime via Service Gateway — no internet
+path needed.</p>
+<hr />
+<h2 id="finding-3-guaranteed-qos-is-not-optional">Finding 3: Guaranteed
+QoS Is Not Optional</h2>
+<p>In Managed Node environments, <code>requests == limits</code> is a
+recommended practice. On Virtual Nodes, it is a structural
+requirement.</p>
+<p>When a Pod is scheduled on a Virtual Node, OKE provisions a dedicated
+OCI Container Instance. The Container Instance shape — CPU and memory —
+must be determined at scheduling time. If
+<code>resources.requests</code> and <code>resources.limits</code> are
+absent, mismatched, or partially declared, shape resolution fails and
+the provisioning layer enters retry loops. This does not surface as a
+configuration error. It presents as non-deterministic, inexplicable
+Pending.</p>
+<p>As noted in <a
+href="https://blogs.oracle.com/cloud-infrastructure/getting-started-best-practices-oke-virtual-nodes">Oracle’s
+best practices for Virtual Nodes</a>, specifying CPU and memory requests
+in pod specs is crucial because this specification is the only way to
+ensure that pods get the CPU and memory required.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ❌ Non-deterministic Pending on Virtual Nodes</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> app</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">image</span><span class="kw">:</span><span class="at"> &lt;image&gt;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">  # No resources declared</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ✅ Guaranteed QoS — deterministic shape resolution</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> app</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">image</span><span class="kw">:</span><span class="at"> &lt;image&gt;</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;250m&quot;</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;256Mi&quot;</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;250m&quot;</span><span class="co">       # Must equal requests</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;256Mi&quot;</span></span></code></pre></div>
+<p><code>requests == limits</code> produces Kubernetes QoS class
+<strong>Guaranteed</strong> — the only class that results in immediate,
+deterministic provisioning on Virtual Nodes. Burstable and BestEffort
+produce non-deterministic scheduling behavior.</p>
+<p>This rule applies to every container in the Pod, including sidecars.
+A sidecar without matching resources drops the entire Pod from
+Guaranteed QoS.</p>
+<hr />
+<h2 id="finding-4-vnic-gc-creates-predictable-pending-windows">Finding
+4: VNIC GC Creates Predictable Pending Windows</h2>
+<p>When a Pod is deleted, its VNIC does not immediately return to the
+subnet address pool. There is an OCI garbage collection window during
+which the IP remains reserved but unavailable. Rapid Pod deletion cycles
+— during force deletes or rolling updates on small subnets — produce a
+window where all IPs appear allocated but no Pods are running.</p>
+<p>This is not a bug. It is expected VCN-Native networking behavior,
+with a recognizable signature:</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> describe pod <span class="op">&lt;</span>pod-name<span class="op">&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Events: &quot;0/2 nodes are available: 2 Insufficient cpu.&quot;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># On Virtual Nodes this message is misleading.</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The actual cause is often IP exhaustion in the pod subnet.</span></span></code></pre></div>
+<p><strong>For constrained subnets</strong> — scale sequentially:</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> deployment.yaml   <span class="co"># replicas: 1 — wait for Running</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> scale deployment <span class="op">&lt;</span>name<span class="op">&gt;</span> --replicas=2</span></code></pre></div>
+<p><strong>After force delete</strong> — wait 60–90 seconds before
+reprovisioning to allow VNIC GC to complete.</p>
+<p><strong>For production</strong> — size the pod subnet at minimum /26.
+For enterprise workloads, /24.</p>
+<hr />
+<h2
+id="finding-5-load-balancer-resets-are-a-reconciliation-artifact">Finding
+5: Load Balancer Resets Are a Reconciliation Artifact</h2>
+<p>Intermittent <code>connection reset by peer</code> errors appeared
+when routing traffic through the internal OCI Load Balancer — not
+systematic, concentrated during Pod rollouts.</p>
+<h3 id="root-cause-three-layer-async-reconciliation">Root cause:
+three-layer async reconciliation</h3>
+<pre><code>Layer 1: Kubernetes EndpointSlice   ← sub-second update on Pod readiness change
+Layer 2: OKE Cloud Controller       ← consumes EndpointSlice events, seconds latency
+Layer 3: OCI LB Backend Set         ← updated by Cloud Controller, seconds to tens of seconds</code></pre>
+<p><strong>Window A</strong> — new Pod not yet in backend set:
+Kubernetes declares the Pod Ready and routes traffic to it, but the OCI
+LB backend set has not yet registered it. Result: TCP RST.</p>
+<p><strong>Window B</strong> — terminating Pod still in backend set: Pod
+receives SIGTERM, EndpointSlice updates immediately, but OCI LB backend
+set takes seconds to propagate. In-flight connections arrive at a
+shutting-down Pod. Result: TCP RST or incomplete response.</p>
+<p>Two solutions exist.</p>
+<hr />
+<h3
+id="solution-a-readinessprobe-prestop-validated-during-deployment">Solution
+A: readinessProbe + preStop (validated during deployment)</h3>
+<p>Addresses both windows through timing coordination. Full
+implementation at <a
+href="https://github.com/alexmocciaoci/oke-virtual-nodepool-deep-dive">github.com/alexmocciaoci/oke-virtual-nodepool-deep-dive</a>.</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">readinessProbe</span><span class="kw">:</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /health</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">timeoutSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">failureThreshold</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lifecycle</span><span class="kw">:</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">preStop</span><span class="kw">:</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">exec</span><span class="kw">:</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">command</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;/bin/sh&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-c&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;sleep 5&quot;</span><span class="kw">]</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="fu">terminationGracePeriodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span><span class="co">  # Must exceed preStop sleep</span></span></code></pre></div>
+<p>On Virtual Nodes, each Pod holds a real VCN IP.
+<code>externalTrafficPolicy: Local</code> eliminates the SNAT hop
+introduced by <code>Cluster</code> policy:</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> LoadBalancer</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">externalTrafficPolicy</span><span class="kw">:</span><span class="at"> Local</span></span></code></pre></div>
+<p><strong>Constraint:</strong>
+<code>externalTrafficPolicy: Local</code> and Pod Readiness Gates are
+mutually exclusive. Do not combine them on the same Service.</p>
+<h3 id="solution-b-pod-readiness-gate-oracle-official-approach">Solution
+B: Pod Readiness Gate (Oracle official approach)</h3>
+<p>Documented in <a
+href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingloadbalancers-podreadinessgates.htm">Oracle
+docs: Pod Readiness Gates</a>. OKE injects an additional readiness
+condition into each Pod, preventing it from being declared Ready until
+OCI confirms it is a healthy LB backend — closing Window A at the
+source.</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> label namespace <span class="op">&lt;</span>namespace<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  loadbalancer.oci.oraclecloud.com/pod-readiness-gate-inject=enabled</span></code></pre></div>
+<p>The Pod remains <code>0/1 READY</code> until the OCI LB backend set
+has registered the Pod IP and the health check has passed.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Scenario</th>
+<th>Recommended</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Rolling deployments, production traffic</td>
+<td>Solution B — Pod Readiness Gate</td>
+</tr>
+<tr class="even">
+<td>Source IP preservation required</td>
+<td>Solution A — readinessProbe + preStop</td>
+</tr>
+<tr class="odd">
+<td>Both concerns</td>
+<td>Separate Services</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2
+id="finding-6-daemonset-based-logging-is-structurally-incompatible.-here-is-what-works.">Finding
+6: DaemonSet-Based Logging Is Structurally Incompatible. Here Is What
+Works.</h2>
+<p>Every standard Kubernetes logging guide prescribes a Fluent Bit or
+Fluentd DaemonSet on worker nodes. On Virtual Nodes, there are no worker
+nodes. DaemonSets do not schedule on Virtual Nodes — full stop.</p>
+<p>This requires a deliberate architectural decision.</p>
+<h3 id="the-sidecar-model-fluent-bit-per-pod">The sidecar model: Fluent
+Bit per Pod</h3>
+<p><a
+href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengviewingapplicationlogs-virtualnodes.htm">Oracle
+docs — Viewing Application Logs on Virtual Nodes</a> documents the
+correct approach: since virtual nodes do not support the Kubernetes
+DaemonSet, a lightweight logging agent runs as a sidecar for each Pod.
+The sidecar and the application container share a volume via
+<code>emptyDir</code>, with the application writing logs to a shared
+path and Fluent Bit reading and forwarding them.</p>
+<p>The following example is adapted from Oracle docs, which uses
+OpenSearch as the remote log server destination. Replace the
+<code>[OUTPUT]</code> block with the persistent log destination
+appropriate to your architecture — OCI Logging, OpenSearch, or another
+supported Fluent Bit output target:</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> ConfigMap</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> fluentbit-config</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> &lt;namespace&gt;</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span><span class="kw">:</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu">  fluent-bit.conf</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    [SERVICE]</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>        flush  1</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>        daemon Off</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    [INPUT]</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>        Name  tail</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>        Path  /mnt/log/*</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>    [OUTPUT]</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>        # Example from Oracle docs uses OpenSearch as remote log server.</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>        # Replace with your target: OCI Logging, OpenSearch, or other Fluent Bit output.</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>        name       opensearch</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>        match      *</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>        host       &lt;log-server-host&gt;</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>        port       &lt;port&gt;</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>        tls        On</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>        HTTP_User  &lt;username&gt;</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>        HTTP_Passwd &lt;password&gt;</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>        Index      fluent-bit</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>        Suppress_Type_Name On</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pod spec — sidecar pattern from Oracle docs</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> logs</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">emptyDir</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> fluentbit-config</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">configMap</span><span class="kw">:</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">name</span><span class="kw">:</span><span class="at"> fluentbit-config</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> app</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">image</span><span class="kw">:</span><span class="at"> &lt;region&gt;.ocir.io/&lt;ns&gt;/&lt;repo&gt;:&lt;tag&gt;</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;250m&quot;</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;256Mi&quot;</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;250m&quot;</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;256Mi&quot;</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">volumeMounts</span><span class="kw">:</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> logs</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> /mnt/log</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> fluent-bit</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">image</span><span class="kw">:</span><span class="at"> fluent/fluent-bit</span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;100m&quot;</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;50Mi&quot;</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;100m&quot;</span><span class="co">      # requests == limits — applies to every container including sidecars</span></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;50Mi&quot;</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">volumeMounts</span><span class="kw">:</span></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> logs</span></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> /mnt/log</span></span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> fluentbit-config</span></span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> /fluent-bit/etc</span></span></code></pre></div>
+<h3 id="infrastructure-events-oci-audit">Infrastructure events: OCI
+Audit</h3>
+<p>OCI Audit captures infrastructure-level events automatically —
+<code>ComputeContainerInstance.Create</code>,
+<code>VirtualNodePool.Create</code>, <code>LoadBalancer.Update</code>,
+IAM policy changes. No configuration required. Queryable via Audit API
+or OCI Console.</p>
+<h3 id="crashloopbackoff-forensics">CrashLoopBackOff forensics</h3>
+<p>On Virtual Nodes, previous container logs may be overwritten after
+multiple restarts. Capture them before the next restart overwrites
+them:</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span> logs <span class="op">&lt;</span>pod-name<span class="op">&gt;</span> --previous <span class="op">&gt;</span> crash-<span class="va">$(</span><span class="fu">date</span> +%s<span class="va">)</span>.log</span></code></pre></div>
+<hr />
+<h2 id="finding-7-live-subnet-migration-zero-downtime-validated">Finding
+7: Live Subnet Migration — Zero Downtime Validated</h2>
+<p>During the deployment, the pod subnet needed to be expanded. The
+expectation was a maintenance window. The result was zero downtime.</p>
+<h3 id="the-mechanics">The mechanics</h3>
+<p>The <code>pod-configuration.subnetId</code> on a Virtual Node Pool is
+a forward-looking configuration. Updating it applies only to new Pods
+created after the change. Existing Pods retain their VNIC attachments
+and IPs from the original subnet — not terminated, not migrated, not
+interrupted.</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">oci</span> ce virtual-node-pool update <span class="dt">\</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--virtual-node-pool-id</span> <span class="op">&lt;</span>vnp-ocid<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--pod-configuration</span> <span class="st">&quot;{</span><span class="dt">\&quot;</span><span class="st">subnetId</span><span class="dt">\&quot;</span><span class="st">:</span><span class="dt">\&quot;</span><span class="st">&lt;new-subnet-ocid&gt;</span><span class="dt">\&quot;</span><span class="st">,</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="st">                        </span><span class="dt">\&quot;</span><span class="st">nsgIds</span><span class="dt">\&quot;</span><span class="st">:[</span><span class="dt">\&quot;</span><span class="st">&lt;pod-nsg-ocid&gt;</span><span class="dt">\&quot;</span><span class="st">],</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="st">                        </span><span class="dt">\&quot;</span><span class="st">shape</span><span class="dt">\&quot;</span><span class="st">:</span><span class="dt">\&quot;</span><span class="st">Pod.Standard.E4.Flex</span><span class="dt">\&quot;</span><span class="st">}&quot;</span></span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>Pod state</th>
+<th>Subnet</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Already running</td>
+<td>Original subnet — unchanged</td>
+</tr>
+<tr class="even">
+<td>New Pods after update</td>
+<td>New subnet — IPs from new CIDR</td>
+</tr>
+<tr class="odd">
+<td>Both groups simultaneously</td>
+<td>Both subnets active in the same VNP</td>
+</tr>
+</tbody>
+</table>
+<h3 id="why-the-load-balancer-routes-correctly">Why the Load Balancer
+routes correctly</h3>
+<p>The Service selector is label-based — it selects Pods by label, not
+by subnet or IP range. When a new Pod on the new subnet passes its
+readiness probe, it enters the EndpointSlice, the Cloud Controller
+Manager reconciles the OCI LB backend set, and traffic begins flowing.
+Both IP sets — from old and new subnet — are simultaneously valid
+backends. The LB does not distinguish by subnet.</p>
+<p><strong>Zero downtime. Validated.</strong></p>
+<p>The practical implication: pod subnet expansion is a live operation.
+Start conservatively in early deployments and expand by updating
+<code>pod-configuration.subnetId</code> when approaching capacity.
+Ensure NSGs are configured on the new subnet before updating.</p>
+<hr />
+<h2 id="production-baseline-complete-golden-configuration">Production
+Baseline: Complete Golden Configuration</h2>
+<h3 id="serviceaccount">ServiceAccount</h3>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> ServiceAccount</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> sa-app</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> &lt;namespace&gt;</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="fu">imagePullSecrets</span><span class="kw">:</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> ocir-pullsecret</span></span></code></pre></div>
+<h3 id="deployment">Deployment</h3>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> apps/v1</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Deployment</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> &lt;app-name&gt;</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> &lt;namespace&gt;</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">replicas</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">revisionHistoryLimit</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">strategy</span><span class="kw">:</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> RollingUpdate</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">rollingUpdate</span><span class="kw">:</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">maxUnavailable</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">maxSurge</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">matchLabels</span><span class="kw">:</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">app</span><span class="kw">:</span><span class="at"> &lt;app-label&gt;</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template</span><span class="kw">:</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">labels</span><span class="kw">:</span></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">app</span><span class="kw">:</span><span class="at"> &lt;app-label&gt;</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">serviceAccountName</span><span class="kw">:</span><span class="at"> sa-app</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">terminationGracePeriodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> logs</span></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">emptyDir</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> fluentbit-config</span></span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">configMap</span><span class="kw">:</span></span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">name</span><span class="kw">:</span><span class="at"> fluentbit-config</span></span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> app</span></span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> &lt;region&gt;.ocir.io/&lt;ns&gt;/&lt;repo&gt;:&lt;tag&gt;</span></span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">imagePullPolicy</span><span class="kw">:</span><span class="at"> Always</span></span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">containerPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;250m&quot;</span></span>
+<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;256Mi&quot;</span></span>
+<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;250m&quot;</span></span>
+<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;256Mi&quot;</span></span>
+<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">readinessProbe</span><span class="kw">:</span></span>
+<span id="cb28-44"><a href="#cb28-44" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb28-45"><a href="#cb28-45" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb28-46"><a href="#cb28-46" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb28-47"><a href="#cb28-47" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb28-48"><a href="#cb28-48" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span></span>
+<span id="cb28-49"><a href="#cb28-49" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">timeoutSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb28-50"><a href="#cb28-50" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">failureThreshold</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb28-51"><a href="#cb28-51" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">livenessProbe</span><span class="kw">:</span></span>
+<span id="cb28-52"><a href="#cb28-52" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb28-53"><a href="#cb28-53" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /</span></span>
+<span id="cb28-54"><a href="#cb28-54" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb28-55"><a href="#cb28-55" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">initialDelaySeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span></span>
+<span id="cb28-56"><a href="#cb28-56" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb28-57"><a href="#cb28-57" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">timeoutSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb28-58"><a href="#cb28-58" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">failureThreshold</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb28-59"><a href="#cb28-59" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">lifecycle</span><span class="kw">:</span></span>
+<span id="cb28-60"><a href="#cb28-60" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">preStop</span><span class="kw">:</span></span>
+<span id="cb28-61"><a href="#cb28-61" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">exec</span><span class="kw">:</span></span>
+<span id="cb28-62"><a href="#cb28-62" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">command</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;/bin/sh&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-c&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;sleep 5&quot;</span><span class="kw">]</span></span>
+<span id="cb28-63"><a href="#cb28-63" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">volumeMounts</span><span class="kw">:</span></span>
+<span id="cb28-64"><a href="#cb28-64" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> logs</span></span>
+<span id="cb28-65"><a href="#cb28-65" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> /mnt/log</span></span>
+<span id="cb28-66"><a href="#cb28-66" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> fluent-bit</span></span>
+<span id="cb28-67"><a href="#cb28-67" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">image</span><span class="kw">:</span><span class="at"> fluent/fluent-bit</span></span>
+<span id="cb28-68"><a href="#cb28-68" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb28-69"><a href="#cb28-69" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">requests</span><span class="kw">:</span></span>
+<span id="cb28-70"><a href="#cb28-70" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;100m&quot;</span></span>
+<span id="cb28-71"><a href="#cb28-71" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;50Mi&quot;</span></span>
+<span id="cb28-72"><a href="#cb28-72" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">limits</span><span class="kw">:</span></span>
+<span id="cb28-73"><a href="#cb28-73" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">cpu</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;100m&quot;</span></span>
+<span id="cb28-74"><a href="#cb28-74" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">memory</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;50Mi&quot;</span></span>
+<span id="cb28-75"><a href="#cb28-75" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">volumeMounts</span><span class="kw">:</span></span>
+<span id="cb28-76"><a href="#cb28-76" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> logs</span></span>
+<span id="cb28-77"><a href="#cb28-77" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> /mnt/log</span></span>
+<span id="cb28-78"><a href="#cb28-78" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> fluentbit-config</span></span>
+<span id="cb28-79"><a href="#cb28-79" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">mountPath</span><span class="kw">:</span><span class="at"> /fluent-bit/etc</span></span></code></pre></div>
+<h3 id="internal-load-balancer-service">Internal Load Balancer
+Service</h3>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Service</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> &lt;app-name&gt;-lb</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">namespace</span><span class="kw">:</span><span class="at"> &lt;namespace&gt;</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">annotations</span><span class="kw">:</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">oci.oraclecloud.com/load-balancer-type</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;lb&quot;</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">oci.oraclecloud.com/internal-load-balancer</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;true&quot;</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> LoadBalancer</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">externalTrafficPolicy</span><span class="kw">:</span><span class="at"> Local</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">selector</span><span class="kw">:</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">app</span><span class="kw">:</span><span class="at"> &lt;app-label&gt;</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">targetPort</span><span class="kw">:</span><span class="at"> </span><span class="dv">80</span></span></code></pre></div>
+<h3 id="quick-start">Quick Start</h3>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Generate kubeconfig</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="ex">oci</span> ce cluster create-kubeconfig <span class="dt">\</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--cluster-id</span> <span class="op">&lt;</span>cluster-ocid<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--file</span> <span class="va">$HOME</span>/.kube/config <span class="dt">\</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--region</span> <span class="op">&lt;</span>region<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--token-version</span> 2.0.0</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Create namespace</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> create namespace <span class="op">&lt;</span>namespace<span class="op">&gt;</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. OCIR pull secret — must exist before any workload</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span> create secret docker-registry ocir-pullsecret <span class="dt">\</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">--docker-server</span><span class="op">=&lt;</span>region<span class="op">&gt;</span>.ocir.io <span class="dt">\</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">--docker-username</span><span class="op">=</span><span class="st">&#39;&lt;tenancy-namespace&gt;/&lt;identity-domain&gt;/&lt;username&gt;&#39;</span> <span class="dt">\</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">--docker-password</span><span class="op">=</span><span class="st">&#39;&lt;auth-token&gt;&#39;</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Apply manifests</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> 00-serviceaccount.yaml</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> 10-deployment.yaml</span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> 20-service-lb.yaml</span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Verify</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span> get pods <span class="at">-o</span> wide</span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span> get svc</span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">-n</span> <span class="op">&lt;</span>namespace<span class="op">&gt;</span> rollout status deployment/<span class="op">&lt;</span>app-name<span class="op">&gt;</span></span></code></pre></div>
+<hr />
+<h2 id="production-checklist">Production Checklist</h2>
+<p><strong>IAM</strong> - [ ] Endorse policies (3 statements) in root
+compartment — <code>virtualnode</code> principal, subnets, vnics, NSG -
+[ ] <code>manage cluster-virtualnode-pools</code> in cluster compartment
+(user group) - [ ] <code>manage cluster-virtualnode-pools</code> in
+network compartment (user group) — SR-confirmed, not in Oracle docs - [
+] <code>read virtual-network-family</code> and <code>manage vnics</code>
+in cluster compartment - [ ] Cluster principal policies for OCI CNI
+(instances, private-ips, NSGs)</p>
+<p><strong>Bootstrap</strong> - [ ] <code>docker-registry</code> Secret
+created before any workload - [ ] Dedicated ServiceAccount with
+<code>imagePullSecrets</code> - [ ] <code>--token-version 2.0.0</code>
+in kubeconfig generation (Identity Domain tenancies)</p>
+<p><strong>Workload</strong> - [ ] <code>requests == limits</code> on
+all containers including sidecars (Guaranteed QoS) - [ ] Dedicated
+ServiceAccount in Pod spec with
+<code>automountServiceAccountToken: true</code> - [ ] Workload Identity
+(<code>request.principal.type='workload'</code>) for Pod-to-OCI auth</p>
+<p><strong>Networking</strong> - [ ] Pod subnet minimum /26 for
+production - [ ] OCIR reachable via Service Gateway - [ ] NSGs
+configured on new subnet before any live subnet migration</p>
+<p><strong>Reliability</strong> - [ ] Pod Readiness Gate OR
+<code>externalTrafficPolicy: Local</code> — choose one, not both - [ ]
+<code>maxUnavailable: 0</code> in rolling update strategy - [ ]
+<code>preStop</code> + <code>terminationGracePeriodSeconds</code> &gt;
+sleep value (if Solution A)</p>
+<p><strong>Logging</strong> - [ ] Fluent Bit sidecar in every Pod spec -
+[ ] Shared <code>emptyDir</code> volume between app and sidecar - [ ]
+Fluent Bit ConfigMap configured for persistent log destination - [ ] OCI
+Audit active for infrastructure events (automatic)</p>
+<p><strong>Cluster</strong> - [ ] Enhanced Cluster — required for
+Virtual Nodes</p>
+<hr />
+<h2 id="conclusions">Conclusions</h2>
+<p>OKE Virtual Node Pool delivers genuine serverless Kubernetes: no
+worker node management, no data plane capacity planning, pod-level
+billing, elastic scaling across the region. In the right architecture,
+it represents a meaningful reduction in operational surface area.</p>
+<p>The path to production, however, requires navigating behaviors that
+official documentation either understates or omits entirely.</p>
+<p>The cross-compartment IAM multi-scope evaluation is the most
+consequential gap. In enterprise tenancies with network/application
+compartment separation — which describes the majority of serious OCI
+deployments — this stops deployment before a single Pod is scheduled.
+The fix is one policy statement, but finding it required formal Oracle
+Support engagement and backend log analysis. The IAM engine logged
+exactly which permission was evaluated and found absent. That is the
+kind of precision that turns days of debugging into minutes.</p>
+<p>The <code>virtualnode</code> IAM principal deserves particular
+attention. It is the most architecturally misunderstood element in the
+Virtual Node IAM model. It exists for one purpose: authorizing the
+cross-tenancy VNIC attachment at Pod scheduling time. It cannot grant
+application code access to OCI services. Understanding this distinction
+prevents the most common IAM design error on Virtual Nodes — and points
+directly to Workload Identity as the correct model for Pod-to-OCI
+authentication.</p>
+<p>The remaining findings — Guaranteed QoS, VNIC GC windows, LB
+reconciliation, DaemonSet incompatibility, live subnet migration — each
+have a well-defined root cause and a deterministic solution. Once the
+underlying mechanics are understood, none of them are surprising. The
+behavior is predictable. The remediation is clean.</p>
+<p>The complete reference implementation is at: <strong><a
+href="https://github.com/alexmocciaoci/oke-virtual-nodepool-deep-dive">github.com/alexmocciaoci/oke-virtual-nodepool-deep-dive</a></strong></p>
+<hr />
+<p><em>Alessandro Moccia — Oracle Solution Architect, OCI Specialist at
+Accenture/Noovle. Oracle ACE Program candidate.</em></p>
+<p><em>Tags: Oracle Cloud, Kubernetes, OKE, Cloud Architecture, IAM,
+Cloud Native, DevOps</em></p>
+</body>
+</html>
